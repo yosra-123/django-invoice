@@ -6,3 +6,5 @@ pip-chill==1.0.3
 psycopg2==2.9.9
 python-decouple==3.8
 whitenoise==6.7.0
+dj-database-url==3.0.1
+
