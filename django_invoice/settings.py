@@ -108,14 +108,16 @@ WSGI_APPLICATION = 'django_invoice.wsgi.application'
 # DATABASE CONFIGURATION
 # ------------------------------
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config(
-            'DATABASE_URL',
-            default='postgres://postgres:postgres@localhost:5432/postgres'
-        ),
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('POSTGRES_DB', default='your_db_name'),
+        'USER': config('POSTGRES_USER', default='your_db_user'),
+        'PASSWORD': config('POSTGRES_PASSWORD', default='your_db_password'),
+        'HOST': config('POSTGRES_HOST', default='your-db-host.onrender.com'),
+        'PORT': config('POSTGRES_PORT', default='5432'),
+    }
 }
+
 
 # ------------------------------
 # PASSWORD VALIDATORS
