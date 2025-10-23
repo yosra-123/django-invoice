@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 from decouple import config
 from django.utils.translation import gettext_lazy as _
+import dj_database_url  # Added for Render PostgreSQL integration
+from django.contrib.auth import get_user_model
 
 # ------------------------------
 # BASE DIRECTORIES
@@ -12,8 +14,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # ------------------------------
 SECRET_KEY = config('SECRET_KEY', default="django-invoiceadfasdfa")
-ALLOWED_HOSTS = ['django-invoice-2en1.onrender.com', 'localhost', '127.0.0.1']
-
+ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+DEBUG = False
 
 # ------------------------------
 # STATIC & MEDIA FILES
@@ -47,7 +49,6 @@ MESSAGE_TAGS = {
 # APPLICATIONS
 # ------------------------------
 INSTALLED_APPS = [
-    # Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -76,7 +77,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 # ------------------------------
@@ -84,6 +84,16 @@ MIDDLEWARE = [
 # ------------------------------
 ROOT_URLCONF = 'django_invoice.urls'
 WSGI_APPLICATION = 'django_invoice.wsgi.application'
+
+# ------------------------------
+# DATABASE CONFIGURATION (Render)
+# ------------------------------
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgres://localhost:5432/postgres',
+        conn_max_age=600
+    )
+}
 
 # ------------------------------
 # STATIC FILES STORAGE
@@ -141,3 +151,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # LOGIN
 # ------------------------------
 LOGIN_URL = 'admin:login'
+
+# ------------------------------
+# AUTO-CREATE SUPERUSER (optional helper)
+# ------------------------------
+# This runs only once if the superuser doesn't exist.
+def create_default_superuser():
+    try:
+        User = get_user_model()
+        if not User.objects.filter(username='yassine').exists():
+            User.objects.create_superuser('yassine', 'admin@example.com', 'yassine')
+            print("✅ Superuser 'yassine' created automatically.")
+    except Exception as e:
+        print("⚠️ Could not create superuser:", e)
