@@ -12,7 +12,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # ------------------------------
 SECRET_KEY = config('SECRET_KEY', default="django-invoiceadfasdfa")
-ALLOWED_HOSTS = ['django-invoice.onrender.com']
+ALLOWED_HOSTS = ['django-invoice-2en1.onrender.com', 'localhost', '127.0.0.1']
+
 
 # ------------------------------
 # STATIC & MEDIA FILES
